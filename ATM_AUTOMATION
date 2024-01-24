@@ -1,0 +1,118 @@
+import java.util.Scanner;
+
+// Create a User class to store user information
+class User {
+    String username;
+    String password;
+    int balance;
+
+    public User(String username, String password, int balance) {
+        this.username = username;
+        this.password = password;
+        this.balance = balance;
+    }
+}
+
+public class ATMExample {
+    public static void main(String args[]) {
+        // Create a user with predefined credentials
+        User user = new User("user", "pass", 0);
+
+        Scanner sc = new Scanner(System.in);
+
+        final int MAX_TRANSACTIONS = 100;
+        String[] transactionHistory = new String[MAX_TRANSACTIONS];
+        int transactionCount = 0;
+
+        System.out.println("Welcome to the ATM");
+
+        // Ask for user credentials
+        System.out.print("Enter username: ");
+        String inputUsername = sc.nextLine();
+        System.out.print("Enter password: ");
+        String inputPassword = sc.nextLine();
+
+        // Check if the entered credentials match
+        if (inputUsername.equals(user.username) && inputPassword.equals(user.password)) {
+            System.out.println("Login successful!");
+
+            while (true) {
+                System.out.println("Automated Teller Machine");
+                System.out.println("Choose 1 for Withdraw");
+                System.out.println("Choose 2 for Deposit");
+                System.out.println("Choose 3 for Check Balance");
+                System.out.println("Choose 4 for Transfer");
+                System.out.println("Choose 5 for Transaction History");
+                System.out.println("Choose 6 for EXIT");
+                System.out.print("Choose the operation you want to perform:");
+
+                int choice = sc.nextInt();
+                switch (choice) {
+                    case 1:
+                        System.out.print("Enter money to be withdrawn:");
+                        int withdraw = sc.nextInt();
+                        if (user.balance >= withdraw) {
+                            user.balance -= withdraw;
+                            System.out.println("Please collect your money");
+                            transactionHistory[transactionCount] = "Withdrawal: $" + withdraw;
+                            transactionCount++;
+                        } else {
+                            System.out.println("Insufficient Balance");
+                        }
+                        System.out.println("");
+                        break;
+
+                    case 2:
+                        System.out.print("Enter money to be deposited:");
+                        int deposit = sc.nextInt();
+                        user.balance += deposit;
+                        System.out.println("Your Money has been successfully deposited");
+                        transactionHistory[transactionCount] = "Deposit: $" + deposit;
+                        transactionCount++;
+                        System.out.println("");
+                        break;
+
+                    case 3:
+                        System.out.println("Balance : " + user.balance);
+                        System.out.println("");
+                        break;
+
+                    case 4:
+                        System.out.print("Enter amount to transfer: ");
+                        int amountToTransfer = sc.nextInt();
+                        if (user.balance >= amountToTransfer) {
+                            System.out.print("Enter account to transfer to: ");
+                            int destinationAccount = sc.nextInt();
+                            // Simulate transfer
+                            user.balance -= amountToTransfer;
+                            transactionHistory[transactionCount] =
+                                    "Transfer: $" + amountToTransfer + " to Account " + destinationAccount;
+                            transactionCount++;
+                            System.out.println("Transfer Successful!");
+                        } else {
+                            System.out.println("Insufficient Balance for Transfer");
+                        }
+                        System.out.println("");
+                        break;
+
+                    case 5:
+                        System.out.println("Transaction History:");
+                        for (int i = 0; i < transactionCount; i++) {
+                            System.out.println(transactionHistory[i]);
+                        }
+                        System.out.println("");
+                        break;
+
+                    case 6:
+                        System.exit(0);
+
+                    default:
+                        System.out.println("Invalid choice");
+                        break;
+                }
+            }
+        } else {
+            System.out.println("Invalid credentials. Exiting...");
+        }
+    }
+}
